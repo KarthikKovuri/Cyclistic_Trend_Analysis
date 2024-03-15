@@ -10,7 +10,7 @@ Cyclistic is a bike-share program with over 5,800 bicycles and 600 docking stati
 The objective is to analyze Cyclistic's historical bike trip data to differentiate between annual members and casual riders, understand the reasons why casual riders might opt for a membership, and assess the potential influence of digital media on marketing tactics. Through this analysis, I aim to design effective marketing strategies aimed at converting casual riders into annual members, ultimately increasing membership uptake for Cyclistic.
 
 ## Data Source
-The data utilized for this project originates from Motivate LLC, a real-world company, under the specified license agreement [here](https://divvybikes.com/data-license-agreement). I've amalgamated 12 months of data (from February 2023 to January 2024) from this source into a unified dataset for comprehensive analysis.
+The data utilized for this project originates from Motivate LLC, a real-world company, under the specified license agreement [here](https://divvybikes.com/data-license-agreement). I've consolidated 12 months of data (from February 2023 to January 2024) from this source into a unified dataset for comprehensive analysis.
 
 ## Data Processing
 **Data Cleaning**:
@@ -89,7 +89,8 @@ from `Cyclistic_ride_data_Feb23_to_Jan24.cyclistic_trip_data`;
 
 ## Data Analysis:
 As part of my analysis, I began to grasp the holistic picture of the data. In this process, I began to develope multiple queries to unveil the true statistical landscape of the dataset.
-### The overall rides taken by members and casuals are as below:
+
+### Overall rides taken by members and casuals are as below:
 
 ```sql
 SELECT
@@ -116,8 +117,169 @@ GROUP BY
 Order BY
   total_rides DESC;
 ```
-### Querty Result:
+### Query Result:
 | member_non_member | electric_bike | classic_bike | docked_bike | total_rides | ride_percentage |
 |-------------------|---------------|--------------|-------------|-------------|-----------------|
 | member            | 1,733,718     | 1,724,699    | 0           | 3,458,417   | 63.45           |
 | casual            | 1,062,451     | 852,959      | 76,549      | 1,991,959   | 36.55           |
+
+### A breakdown of number of rides per day.
+
+```sql
+SELECT
+  day,
+  sum(`non-member`) as total_non_member,
+  sum(member) as total_member,
+  sum(total_rides_day) as total_rides,
+  Round((sum(total_rides_day) / sum(sum(total_rides_day)) OVER ())*100,2) as ride_percentage_day
+FROM
+(
+  SELECT
+    day,
+    sum(CASE WHEN member_casual = "casual" then 1 else 0 END) as `non-member`,
+    sum(CASE WHEN member_casual = "member" then 1 else 0 END) as `member`,
+    sum(CASE WHEN member_casual IN ("casual", "member") then 1 else 0 END) as total_rides_day
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+  GROUP BY day  
+) as ride_per_day
+GROUP BY
+  day
+ORDER BY
+  total_rides DESC;
+```
+### Query Result: 
+| day        | total_non_member | total_member | total_rides | ride_percentage_day |
+|------------|------------------|--------------|-------------|---------------------|
+| Saturday   | 398,510          | 444,460      | 842,970     | 15.47               |
+| Thurday    | 262,353          | 561,090      | 823,443     | 15.11               |
+| Wednesday  | 240,794          | 560,454      | 801,248     | 14.7                |
+| Friday     | 300,509          | 495,927      | 796,436     | 14.61               |
+| Tuesday    | 237,418          | 542,837      | 780,255     | 14.32               |
+| Sunday     | 324,237          | 383,537      | 707,774     | 12.99               |
+| Monday     | 228,138          | 470,112      | 698,250     | 12.81               |
+
+### Monthly distribution of ride counts.
+
+```sql
+SELECT
+  month,
+  sum(non_member) as total_non_member,
+  sum(member) as total_member,
+  sum(total_monthly_rides) as total_monthly_rides,
+  Round((sum(total_monthly_rides) / sum(sum(total_monthly_rides)) OVER ())*100,2) as monthly_rides_percentage
+FROM
+(
+SELECT
+ month,
+ sum(CASE WHEN member_casual = "casual" then 1 else 0 END) as non_member,
+ sum(CASE WHEN member_casual = "member" then 1 else 0 END) as member,
+ sum(CASE WHEN member_casual IN ("casual", "member") then 1 else 0 END) as total_monthly_rides
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+GROUP BY
+  month
+)
+Group By
+ month
+ORDER BY
+ total_monthly_rides DESC;
+```
+
+### Query Result:
+| month     | total_non_member | total_member | total_monthly_rides | monthly_rides_percentage |
+|-----------|------------------|--------------|---------------------|-------------------------|
+| August    | 311,130          | 460,563      | 771,693             | 14.16                   |
+| July      | 331,358          | 436,292      | 767,650             | 14.08                   |
+| June      | 301,230          | 418,388      | 719,618             | 13.2                    |
+| September | 261,635          | 404,736      | 666,371             | 12.23                   |
+| May       | 234,181          | 370,646      | 604,827             | 11.1                    |
+| October   | 177,071          | 360,042      | 537,113             | 9.85                    |
+| April     | 147,285          | 279,305      | 426,590             | 7.83                    |
+| November  | 98,392           | 264,126      | 362,518             | 6.65                    |
+| March     | 62,201           | 196,477      | 258,678             | 4.75                    |
+| February  | 43,016           | 147,429      | 190,445             | 3.49                    |
+| January   | 24,460           | 120,413      | 144,873             | 2.66                    |
+
+### Hourly breakdown of rides throughout the day.
+
+```sql
+select
+ time_range,
+ sum(non_member) as non_member,
+ sum(member) as member,
+ sum(rides_per_hour) as rides_per_hour,
+ round(sum(rides_per_hour) / (sum(sum(rides_per_hour)) OVER())*100,2) as monthly_rides_per_hour
+from
+(
+select 
+ time_range,
+ sum(case when member_casual = 'casual' then 1 else 0 end) as non_member,
+ sum(case when member_casual = 'member' then 1 else 0 end) as member,
+ sum(case when member_casual IN ('member','casual') then 1 else 0 end) as rides_per_hour
+from `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+group by 
+ time_range
+)
+GROUP BY
+ time_range
+ORDER BY
+ non_member DESC;
+```
+### Query Result:
+| time_range   | non_member | member  | rides_per_hour | monthly_rides_per_hour |
+|--------------|------------|---------|----------------|------------------------|
+| 5PM - 6PM    | 193,947    | 369,117 | 563,064        | 10.33                  |
+| 4PM - 5PM    | 176,658    | 313,727 | 490,385        | 9                      |
+| 6PM - 7PM    | 167,644    | 293,365 | 461,009        | 8.46                   |
+| 3PM - 4PM    | 153,831    | 231,780 | 385,611        | 7.07                   |
+| 2PM - 3PM    | 137,851    | 189,635 | 327,486        | 6.01                   |
+| 1PM - 2PM    | 132,220    | 186,290 | 318,510        | 5.84                   |
+| 12PM - 1PM   | 126,580    | 187,475 | 314,055        | 5.76                   |
+| 7PM - 8PM    | 123,917    | 207,921 | 331,838        | 6.09                   |
+| 11AM - 12PM  | 106,821    | 165,354 | 272,175        | 4.99                   |
+| 8PM - 9PM    | 89,402     | 144,767 | 234,169        | 4.3                    |
+| 10AM - 11AM  | 83,595     | 139,458 | 223,053        | 4.09                   |
+| 9PM - 10PM   | 74,970     | 112,134 | 187,104        | 3.43                   |
+| 8AM - 9AM    | 67,841     | 230,130 | 297,971        | 5.47                   |
+| 9AM - 10AM   | 67,360     | 154,957 | 222,317        | 4.08                   |
+| 10PM - 11PM  | 66,282     | 83,654  | 149,936        | 2.75                   |
+| 7AM - 8AM    | 50,626     | 183,636 | 234,262        | 4.3                    |
+| 11PM - 12AM  | 47,559     | 53,199  | 100,758        | 1.85                   |
+| 12AM - 1AM   | 35,339     | 33,179  | 68,518         | 1.26                   |
+| 6AM - 7AM    | 28,770     | 99,470  | 128,240        | 2.35                   |
+| 1AM - 2AM    | 22,919     | 19,760  | 42,679         | 0.78                   |
+| 2AM - 3AM    | 13,762     | 11,387  | 25,149         | 0.46                   |
+| 5AM - 6AM    | 10,830     | 32,251  | 43,081         | 0.79                   |
+| 3AM - 4AM    | 7,603      | 7,486   | 15,089         | 0.28                   |
+| 4AM - 5AM    | 5,632      | 8,285   | 13,917         | 0.26                   |
+
+### Ride Duration Analysis by User Type
+
+```sql
+SELECT
+ member_casual,
+ sum(avg_ride_time) as total_avg_time,
+ sum(electric_bike_avg_time) as electric_avg_time,
+ sum(classic_avg_time) as calssic_avg_time,
+ sum(docked_bike) as docked_avg_time,
+ Round(sum(avg_ride_time) / (sum(sum(avg_ride_time)) OVER())*100,2) as avg_ride_time_percentage
+FROM
+(
+SELECT
+ member_casual,
+ ROUND(AVG(ride_time),2) AS avg_ride_time,
+ ROUND(AVG(CASE WHEN rideable_type = 'electric_bike' THEN ride_time END),2) AS electric_bike_avg_time,
+ ROUND(AVG(CASE WHEN rideable_type = 'classic_bike' THEN ride_time END),2) AS classic_avg_time,
+ ROUND(AVG(CASE WHEN rideable_type = 'docked_bike' THEN ride_time END),2) AS docked_bike
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.station_data`
+GROUP BY
+  member_casual
+)
+GROUP BY
+ member_casual;
+```
+
+### Query Result:
+| member_casual | total_avg_time | electric_avg_time | classic_avg_time | docked_avg_time | avg_ride_time_percentage |
+|---------------|----------------|-------------------|------------------|-----------------|-------------------------|
+| member        | 12.27          | 10.62             | 13.15            | N/A             | 34.62                   |
+| casual        | 23.17          | 14.84             | 25.92            | 54.31           | 65.38                   |
