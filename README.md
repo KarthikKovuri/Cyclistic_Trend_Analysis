@@ -13,7 +13,7 @@ The objective is to analyze Cyclistic's historical bike trip data to differentia
 The data utilized for this project originates from Motivate LLC, a real-world company, under the specified license agreement [here](https://divvybikes.com/data-license-agreement). I've amalgamated 12 months of data (from February 2023 to January 2024) from this source into a unified dataset for comprehensive analysis.
 
 ## Data Processing
-**DataClening**:
+**Data Cleaning**:
 Initially, I consolidated data from 12 months into a single dataset, totaling 54,50,376 rows, each representing ride information. A meticulous review revealed missing 'start_station_names' and 'end_station_names' entries. For ride detail analysis, the complete dataset was utilized, while analysis involving station names excluded entries with null values, resulting in 41,30,450 rows.
 
 **Data Preperation**: 
@@ -78,7 +78,46 @@ select
   END AS time_range
 from `Cyclistic_ride_data_Feb23_to_Jan24.cyclistic_trip_data`;
 ```
+
 ## Query Result:
+<details>
+  <summary> Click to view SQL query results </summary>
+  
 ![SS_table](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/d328b7ff-fd91-4c31-9dec-2e131fa3bd09)
 
+</details>
 
+## Data Analysis:
+As part of my analysis, I began to grasp the holistic picture of the data. In this process, I began to develope multiple queries to unveil the true statistical landscape of the dataset.
+### The overall rides taken by members and casuals are as below:
+
+```sql
+SELECT
+ `member_non-member` as member_non_member,
+ sum(electric_bike) as electiric_bike,
+ sum(classic_bike) as calssic_bike,
+ sum(docked_bike) as docked_bike,
+ sum(total_bike_rides) as total_rides,
+ Round(sum(total_bike_rides) / sum(sum(total_bike_rides)) OVER()*100,2) as ride_percentage
+FROM
+(
+  SELECT
+   member_casual as `member_non-member`,
+   sum(CASE WHEN rideable_type = 'electric_bike' then 1 else 0 END) as electric_bike,
+   sum(CASE WHEN rideable_type = 'classic_bike' then 1 else 0 END) as classic_bike,
+   sum(CASE WHEN rideable_type = 'docked_bike' then 1 else 0 END) as docked_bike,
+   sum(CASE WHEN rideable_type IN ('electric_bike','classic_bike','docked_bike') then 1 else 0 END) as total_bike_rides
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+  Group by
+   member_casual
+)
+GROUP BY 
+ member_non_member
+Order BY
+  total_rides DESC;
+```
+### Querty Result:
+| member_non_member | electric_bike | classic_bike | docked_bike | total_rides | ride_percentage |
+|-------------------|---------------|--------------|-------------|-------------|-----------------|
+| member            | 1,733,718     | 1,724,699    | 0           | 3,458,417   | 63.45           |
+| casual            | 1,062,451     | 852,959      | 76,549      | 1,991,959   | 36.55           |
