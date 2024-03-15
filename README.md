@@ -283,3 +283,198 @@ GROUP BY
 |---------------|----------------|-------------------|------------------|-----------------|-------------------------|
 | member        | 12.27          | 10.62             | 13.15            | N/A             | 34.62                   |
 | casual        | 23.17          | 14.84             | 25.92            | 54.31           | 65.38                   |
+
+### Note: Below, you'll find an analysis table excluding null values in both the start and end station names, resulting in a dataset of 4,130,450 rows.
+
+```sql
+DROP TABLE If EXISTS `Cyclistic_ride_data_Feb23_to_Jan24.station_data`;
+
+Create Table `Cyclistic_ride_data_Feb23_to_Jan24.station_data` as
+select
+ *
+from `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+Where 
+ start_station_name is not null
+ and
+ end_station_name is not null;
+```
+### Query Result:
+<details>
+  <summary> Click to view SQL query results </summary>
+  
+![SS_station_table](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/b1a84f26-1441-45e8-af21-f0d78a5ab4e4)
+</details>
+
+### Count of round trips categorized by bike type for both members and casual riders.
+```sql
+SELECT
+ member_casual as member_non_member,
+ sum(round_trip) as count_of_round_trips,
+ sum(count_electric) as count_of_electric,
+ sum(count_classic) as count_of_classic,
+ sum(count_docked) as count_docked,
+ Round(sum(round_trip) / (sum(sum(round_trip)) OVER())*100,2) as round_trip_percentage
+FROM
+(
+SELECT
+ member_casual,
+ count(ride_id) as round_trip,
+ sum(CASE WHEN rideable_type = 'electric_bike' THEN 1 Else 0 END) AS count_electric,
+ sum(CASE WHEN rideable_type = 'classic_bike' THEN 1 Else 0 END) AS count_classic,
+ sum(CASE WHEN rideable_type = 'docked_bike' THEN 1 Else 0 END) AS count_docked
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.station_data`
+WHERE
+ start_station_name = end_station_name
+GROUP BY
+ member_casual
+)
+GROUP BY
+ member_non_member
+ORDER BY
+ count_of_round_trips DESC;
+```
+### Query Result:
+| member_non_member | count_of_round_trips | count_of_electric | count_of_classic | count_docked | round_trip_percentage |
+|-------------------|----------------------|-------------------|------------------|--------------|-----------------------|
+| casual            | 1,45,447              | 46,051            | 85,081           | 14,315       | 54.59                 |
+| member            | 1,21,012              | 49,367            | 71,645           | 0            | 45.41                 |
+
+### Stations with the highest visitor traffic, for both members and casuls riders.
+```sql
+SELECT
+ start_station_name,
+ count(start_station_name) as visits_per_station,
+ sum(CASE WHEN member_casual = "member" then 1 ELSE 0 END) as member,
+ sum(CASE WHEN member_casual = "casual" then 1 ELSE 0 END) as non_member
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.station_data`
+GROUP BY
+ start_station_name
+ORDER BY
+ visits_per_station DESC
+Limit 15;
+```
+
+### Query Result:
+| start_station_name                 | visits_per_station | member | non_member |
+|-----------------------------------|--------------------|--------|------------|
+| Streeter Dr & Grand Ave           | 58,494             | 15,774 | 42,720     |
+| DuSable Lake Shore Dr & Monroe St | 37,233             | 9,085  | 28,148     |
+| Michigan Ave & Oak St             | 34,117             | 13,273 | 20,844     |
+| DuSable Lake Shore Dr & North Blvd| 32,747             | 14,089 | 18,658     |
+| Clark St & Elm St                 | 31,162             | 21,626 | 9,536      |
+| Kingsbury St & Kinzie St          | 30,532             | 22,797 | 7,735      |
+| Wells St & Concord Ln             | 28,578             | 18,095 | 10,483     |
+| Clinton St & Washington Blvd      | 28,362             | 22,757 | 5,605      |
+| Theater on the Lake               | 27,692             | 12,718 | 14,974     |
+| Millennium Park                   | 27,170             | 8,757  | 18,413     |
+| Wells St & Elm St                 | 26,107             | 17,411 | 8,696      |
+| Broadway & Barry Ave              | 23,873             | 15,946 | 7,927      |
+| Indiana Ave & Roosevelt Rd        | 23,477             | 12,884 | 10,593     |
+| Clinton St & Madison St           | 23,277             | 18,013 | 5,264      |
+| Wilton Ave & Belmont Ave          | 23,010             | 14,039 | 8,971      |
+
+
+### Stations experiencing minimal traffic (< 5 visits), for both members and casual riders.
+```sql
+SELECT
+ start_station_name,
+ count(start_station_name) as visits_per_station,
+ sum(CASE WHEN member_casual = "member" then 1 ELSE 0 END) as member,
+ sum(CASE WHEN member_casual = "casual" then 1 ELSE 0 END) as non_member
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.station_data`
+GROUP BY
+ start_station_name
+ORDER BY
+ visits_per_station ASC;
+```
+### Query Result:
+
+<details>
+  <summary> Click to view SQL query results </summary>
+  
+| start_station_name                                | visits_per_station | member | non_member |
+|--------------------------------------------------|--------------------|--------|------------|
+| Leclaire Ave & Belmont Ave                       | 1                  | 1      | 0          |
+| Public Rack - Neola & Northwest Hwy              | 1                  | 0      | 1          |
+| Public Rack - Oglesby Ave & 95th St              | 1                  | 0      | 1          |
+| Public Rack - Michigan Ave & 119th St            | 1                  | 0      | 1          |
+| Public Rack - Mulligan & Northwest Hwy           | 1                  | 0      | 1          |
+| Public Rack - Yates Blvd & Exchange Ave          | 1                  | 1      | 0          |
+| Public Rack - Baltimore Ave & 134th St           | 1                  | 1      | 0          |
+| Public Rack - Perry Ave & 108th Pl               | 1                  | 1      | 0          |
+| Public Rack - Lowe Ave & 94th St                 | 1                  | 0      | 1          |
+| Public Rack - May St & 78th St                   | 1                  | 1      | 0          |
+| Public Rack - Cottage Grove Ave & 75th St        | 1                  | 1      | 0          |
+| Public Rack - Homan & 77th                       | 1                  | 0      | 1          |
+| Public Rack - Ellis Ave & 132nd Pl               | 1                  | 0      | 1          |
+| Public Rack - James Madison School               | 1                  | 1      | 0          |
+| Public Rack - Ashland Ave & 73rd St              | 1                  | 0      | 1          |
+| Public Rack - Ewing Ave & 96th St S              | 1                  | 0      | 1          |
+| Public Rack - Central Park Ave & 16th St         | 1                  | 0      | 1          |
+| Public Rack - Western Ave & 111th St - NW        | 1                  | 1      | 0          |
+| Public Rack - Mt Greenwood Library - South       | 1                  | 0      | 1          |
+| Public Rack - Oakley & 79th Pl                   | 1                  | 0      | 1          |
+| Public Rack - Chappel Ave & 71st St              | 1                  | 0      | 1          |
+| Public Rack - Emerald Ave & 45th St              | 1                  | 1      | 0          |
+| Public Rack - Lowe Park                          | 1                  | 1      | 0          |
+| Public Rack - Michigan Ave & 107th St            | 1                  | 0      | 1          |
+| Public Rack - 85th Pl & Pulaski Rd               | 1                  | 0      | 1          |
+| Public Rack - Menard Ave & Leland Ave            | 1                  | 1      | 0          |
+| Public Rack - Northwest Hwy & Raven St           | 1                  | 1      | 0          |
+| Public Rack - Western & 74th                     | 1                  | 0      | 1          |
+| Public Rack - Menard Ave & Agusta Blvd           | 1                  | 0      | 1          |
+| Public Rack - Pulaski Rd & Flournoy St           | 1                  | 0      | 1          |
+| Public Rack - Central Park Ave & Fillmore St     | 1                  | 0      | 1          |
+
+</details>
+
+### Stations with >10K visits by Caluals
+
+```sql
+SELECT
+ start_station_name as station_name,
+ SUM(CASE when member_casual = "casual" then 1 else 0 END) as no_of_non_member_visits
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.station_data`
+WHERE
+ start_station_name is not null
+GROUP BY
+ start_station_name
+ORDER BY
+ no_of_non_member_visits DESC
+LIMIT 10;
+```
+### Query Result:
+
+| station_name                          | no_of_non_member_visits |
+|---------------------------------------|-------------------------|
+| Streeter Dr & Grand Ave              | 42,720                  |
+| DuSable Lake Shore Dr & Monroe St    | 28,148                  |
+| Michigan Ave & Oak St                | 20,844                  |
+| DuSable Lake Shore Dr & North Blvd   | 18,658                  |
+| Millennium Park                      | 18,413                  |
+| Shedd Aquarium                       | 16,308                  |
+| Theater on the Lake                  | 14,974                  |
+| Dusable Harbor                       | 14,227                  |
+| Adler Planetarium                    | 11,080                  |
+| Montrose Harbor                      | 10,827                  |
+| Indiana Ave & Roosevelt Rd           | 10,593                  |
+| Wells St & Concord Ln                | 10,483                  |
+| Michigan Ave & 8th St                | 10,038                  |
+
+### The table below illustrates the frequency of time (in minutes) intervals per booking, using the standard deviation method.
+```sql
+SELECT
+ member_casual as member_non_member,
+ Round(STDDEV(ride_time),2) as SD_ride_time,
+ Round(STDDEV(CASE when rideable_type = "electric_bike" then ride_time END),2) as SD_electric_bike,
+ Round(STDDEV(CASE when rideable_type = "classic_bike" then ride_time END),2) as SD_classic_bike,
+ Round(STDDEV(CASE when rideable_type = "docked_bike" then ride_time END),2) as SD_docked_bike
+FROM `Cyclistic_ride_data_Feb23_to_Jan24.trip_data`
+GROUP BY
+ member_non_member;
+```
+### Query Result:
+| member_non_member | SD_ride_time | SD_electric_bike | SD_classic_bike | SD_docked_bike |
+|-------------------|--------------|------------------|-----------------|----------------|
+| casual            | 298.51       | 16.18            | 114.2           | 1464.02        |
+| member            | 38.27        | 15.36            | 51.92           | N/A            |
