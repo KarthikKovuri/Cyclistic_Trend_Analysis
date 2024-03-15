@@ -1,5 +1,5 @@
 # Cyclistic : Rider Trend Analysis
-
+![bike-share-2](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/e028dfc2-8bc5-4f78-95ff-f7147169ddc0) {widths=100%}
 ## Company Profile
 
 Cyclistic is a bike-share program with over 5,800 bicycles and 600 docking stations, known for its inclusivity with options like reclining bikes and hand tricycles. Serving people with disabilities and those preferring non-standard bikes, it balances leisure and commuting needs. Approximately 30% of riders use the bikes for daily work commutes, showcasing its practicality beyond recreational use.
