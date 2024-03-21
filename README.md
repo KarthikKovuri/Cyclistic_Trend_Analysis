@@ -88,8 +88,13 @@ from `Cyclistic_ride_data_Feb23_to_Jan24.cyclistic_trip_data`;
 </details>
 
 ## Data Analysis:
-As part of my analysis, I began to grasp the holistic picture of the data. In this process, I began to develope multiple queries to unveil the true statistical landscape of the dataset.
+As part of my analysis, I began to grasp the holistic picture of the data. In this process, I began to develope multiple SQL queries in Bigquery to unveil the true statistical landscape of the dataset.
 
+<details>
+  <summary> 
+    <b>Click to view all the SQL query and results</b>
+  </summary>
+  
 ### Overall rides taken by members and casuals are as below:
 
 ```sql
@@ -478,3 +483,5 @@ GROUP BY
 |-------------------|--------------|------------------|-----------------|----------------|
 | casual            | 298.51       | 16.18            | 114.2           | 1464.02        |
 | member            | 38.27        | 15.36            | 51.92           | N/A            |
+
+</details>
