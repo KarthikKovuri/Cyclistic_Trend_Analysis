@@ -1,7 +1,7 @@
 <h1 aling="left"> Cyclistic : Rider Trend Analysis </h1>
 
 <p align="center">
-  <img src="https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/273facd0-45ea-4a0e-b8c0-c15a3bde1f80" alt="alt text" style="width:900px;height:450px;">
+  <img src="https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/273facd0-45ea-4a0e-b8c0-c15a3bde1f80" alt="alt text" style="width:1000px;height:500px;">
 </p>
 
 <h2 align="left"> Company Profile </h2>
@@ -489,3 +489,31 @@ GROUP BY
 | member            | 38.27        | 15.36            | 51.92           | N/A            |
 
 </details>
+
+## Dashboard
+
+![Cyclistic - Rider Trend Analysis 1](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/618a63f2-454f-4867-917c-4aff3b9d905c)
+
+![Cyclistic - Rider Trend Analysis 2](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/2fde78a7-4ff7-4e37-95df-925d4c862ea9)
+
+
+
+## Key Findings & Insights:
+
+-  In total, there were 5.67 million rides taken, with electric bikes being most popular accounting for 2.92 million, classic bikes for 2.68 million, and 76.55 thousand from docked bikes, exclusively by casual members. Casual members contributed 36% (20,43,631) of the total rides, with the remaining 64% (36,30,818) from memberships.
+- Casual riders exhibit an average ride duration 123% higher, with a mean time of 28.25 minutes, compared to members who average 12.64 minutes per ride.
+- Riders, both members and casuals, demonstrate increased activity during summer months (June to August). Member traffic peaks Tuesday to Thursday, while for casual riders, Saturday emerges as the busiest day, recording over 400,000 rides.
+- An evolving trend is observed with electric bikes, totaling ~3 million rides. Notably, casual riders contribute about 1 million rides, while out of 2.6 million casual rides, nearly 0.9 million are made by casual riders.
+- Casual members demonstrate a preference for weekend usage, with both longer ride durations and a higher frequency of round trips compared to regular members.
+
+## Recomendations: 
+
+#### Ridable Types:
+
+- Electric bikes contribute significantly to 51.38% of the total business, indicating immense potential. It is recommended to develop membership plans targeting casual riders, understanding their commuting needs more deeply to attract and retain them effectively.
+- Furthermore, Classic bikes represent a substantial portion, constituting 47% of total business and casual riders have a average ride time of 32.23 minuts setting a target for members who's average is 14.41 minutes. 
+- Docked bikes are only used by 
+
+
+#### Ride Time/Length:
+- 
