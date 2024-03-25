@@ -95,9 +95,11 @@ from `Cyclistic_ride_data_Feb23_to_Jan24.cyclistic_trip_data`;
 As part of my analysis, I began to grasp the holistic picture of the data. In this process, I began to develope multiple SQL queries in Bigquery to unveil the true statistical landscape of the dataset.
 
 <details>
-  <summary> 
-    <b>Click to view all the SQL query and results</b>
-  </summary>
+<summary> 
+    <b>[Click to view all the SQL query and results](#)</b>
+</summary>
+
+
   
 ### Overall rides taken by members and casuals are as below:
 
@@ -497,23 +499,26 @@ GROUP BY
 ![Cyclistic - Rider Trend Analysis 2](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/2fde78a7-4ff7-4e37-95df-925d4c862ea9)
 
 
-
 ## Key Findings & Insights:
 
--  In total, there were 5.67 million rides taken, with electric bikes being most popular accounting for 2.92 million, classic bikes for 2.68 million, and 76.55 thousand from docked bikes, exclusively by casual members. Casual members contributed 36% (20,43,631) of the total rides, with the remaining 64% (36,30,818) from memberships.
+- In total, there were 5.67 million rides taken, with electric bikes being most popular accounting for 2.92 million, classic bikes for 2.68 million, and 76.55 thousand from docked bikes, exclusively by casual members. Casual members contributed 36% (20,43,631) of the total rides, with the remaining 64% (36,30,818) from memberships.
 - Casual riders exhibit an average ride duration 123% higher, with a mean time of 28.25 minutes, compared to members who average 12.64 minutes per ride.
 - Riders, both members and casuals, demonstrate increased activity during summer months (June to August). Member traffic peaks Tuesday to Thursday, while for casual riders, Saturday emerges as the busiest day, recording over 400,000 rides.
 - An evolving trend is observed with electric bikes, totaling ~3 million rides. Notably, casual riders contribute about 1 million rides, while out of 2.6 million casual rides, nearly 0.9 million are made by casual riders.
 - Casual members demonstrate a preference for weekend usage, with both longer ride durations and a higher frequency of round trips compared to regular members.
 
-## Recomendations: 
-
-#### Ridable Types:
+## Recommendations: 
 
 - Electric bikes contribute significantly to 51.38% of the total business, indicating immense potential. It is recommended to develop membership plans targeting casual riders, understanding their commuting needs more deeply to attract and retain them effectively.
-- Furthermore, Classic bikes represent a substantial portion, constituting 47% of total business and casual riders have a average ride time of 32.23 minuts setting a target for members who's average is 14.41 minutes. 
-- Docked bikes are only used by 
+- Additionally, Classic bikes make up a significant share, comprising 47% of total business. Casual riders average a ride time of 32.23 minutes, setting a benchmark for members whose average is 14.41 minutes 
+- Docked bikes, exclusively used by Casual members, have infrequent use but the longest average ride time around 180 minutes, particularly favored on weekends.
+- Member and Casual Rides exhibit a positive correlation with the timing of rides throughout the day between 3PM and 7PM. Therefore, this timeframe presents an ideal opportunity to reach both Casuals and Members through advertising campaigns.
+- Moreover, summer emerges as the busiest season for both categories. Implementing campaigns during April and May, October and November coupled with offering free membership for a month during these months, holds the potential to boost annual memberships significantly.
+- Casual members exhibit a higher frequency of round trips compared to regular members. Therefore, emphasizing round trips in effective membership plans can attract additional memberships.
+
+#### Note: The recommendations provided are derived from available data; however, further in-depth analysis is needed to comprehend commuting patterns and reasons. Additionally, exploring the potential of longer ride lengths among casual riders is crucial.
 
 
-#### Ride Time/Length:
-- 
+## Conclusions:
+
+- Casual riders present a significant business opportunity, contributing not only with high average ride times but also making a greater number of round trips compared to members. Crafting membership plans targeting these aspects and running campaigns during strategic months, such as April & May and October & November, with a particular focus on digital ads between 3pm to 7pm in high-traffic stations throughout the year, holds high potential for both retaining existing members and converting casual riders into members.
