@@ -1,3 +1,5 @@
+<p align="right"> <img src="https://komarev.com/ghpvc/?username=karthikkovuri&label=Repository%20views&color=0e75b6&style=flat" alt="karthikkovuri" /> </p>
+
 <h1 aling="left"> Cyclistic : Rider Trend Analysis </h1>
 
 <p align="center">
