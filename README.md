@@ -13,7 +13,52 @@ Cyclistic is a bike-share program with over 5,800 bicycles and 600 docking stati
 The objective is to analyze Cyclistic's historical bike trip data to differentiate between annual members and casual riders, understand the reasons why casual riders might opt for a membership, and assess the potential influence of digital media on marketing tactics. Through this analysis, I aim to design effective marketing strategies aimed at converting casual riders into annual members, ultimately increasing membership uptake for Cyclistic.
 
 <h2 align="left"> Data Source </h2>
-The data utilized for this project originates from Motivate LLC, a real-world company, under the specified license agreement [here](https://divvybikes.com/data-license-agreement). I've consolidated 12 months of data (from February 2023 to January 2024) from this source into a unified dataset for comprehensive analysis.
+The data utilized for this project originates from Motivate LLC, a real-world company, under the specified license agreement [here](https://divvybikes.com/data-license-agreement). I've consolidated 12 months of data (from February 2023 to January 2024) from this source into a unified datasets using UNION ALL for comprehensive analysis.
+
+```sql
+Create Table `Cyclistic_ride_data_Feb23_to_Jan24.cyclistic_trip_data` as
+(
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_02_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_03_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_04_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_05_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_06_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_07_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_08_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_09_2023`
+  UNION ALL
+  SELECT *
+  From `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_10_2023`
+  UNION ALL
+  SELECT *
+  FROM `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_11_2023`
+  UNION ALL
+  SELECT *
+  From `Cyclistic_ride_data_Feb23_to_Jan24.divvy_tripdata_01_2024`
+)
+```
+<details> 
+ <summary> <b> Click to view above SQL query results </b>
+ </summary>
+
+  ![SS](https://github.com/KarthikKovuri/Cyclistic_Trend_Analysis/assets/162425413/239bf3d5-fa7f-4155-8af7-335ab64b8c1b)
+
+</details>
 
 <h2 align="left"> Data Processing </h2>
 
@@ -98,7 +143,7 @@ As part of my analysis, I began to grasp the holistic picture of the data. In th
 
 <details>
 <summary> 
-    <b>[Click to view all the SQL query and results](#)</b>
+    <b text style color="blue"> Click to view all the SQL query and results </b>
 </summary>
 
 
